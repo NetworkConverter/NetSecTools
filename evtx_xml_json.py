@@ -37,7 +37,7 @@ def to_json(elem):
             result[child.tag.split('}', 1)[1]] = to_json(child)
     
     # Hopefully they don't have anything crazy here...
-    if elem.tail.strip():
+    if elem.tail and elem.tail.strip():
         print elem.tail
         raise ValueError("Noooooo")
     
