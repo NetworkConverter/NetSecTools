@@ -29,7 +29,8 @@ def to_json(elem):
     
     # Add the attributes to the result
     if len(elem.attrib) > 0:
-        result.update(elem.attrib)
+        for key, value in elem.attrib.iteritems():
+            result[key] = text_value(value)
     
     # Add all children's values to the result
     if len(elem) > 0:
