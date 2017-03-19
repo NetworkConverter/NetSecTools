@@ -9,9 +9,9 @@ def text_value(text):
     if text == None:
         val = ""
     elif text.count('\n'):
-        val = []
+        val = ""
         for line in text.splitlines():
-            val.append(line.strip())
+            val += line.strip()
     else:
         try:
             val = long(text)
@@ -56,7 +56,11 @@ def event_to_json(event_xml_tag):
             data["Other"] = []
             for datum in event_child:
                 if 'Name' not in datum.attrib:
-                    data["Other"].append(text_value(datum.text))
+                    try:
+                        data["Other"].append(str(text_value(datum.text)))
+                    except UnicodeEncodeError:
+                        print "Unicode error encountered. Skipping event..."
+                        continue
                 else:
                     datum_name = datum.attrib['Name']
                     del datum.attrib['Name'] # Don't want this twice
@@ -66,7 +70,7 @@ def event_to_json(event_xml_tag):
                         data[datum_name] = "0.255.255.255" # Assign an invalid address so that we know it was empty
                     else:
                         data[datum_name] = text_value(datum.text)
-                
+            data["Other"] = "\n".join(data["Other"])
             event["Data"] = data
         else:
             event[tag_name] = to_json(event_child)
