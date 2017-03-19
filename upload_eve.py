@@ -22,6 +22,7 @@ if __name__ == "__main__":
     for line in eve:
         line_count += 1
     print "Number of lines in " + sys.argv[1] + ": " + str(line_count)
+    eve.seek(0)
 
     action_map = {}
     line_index = 0
@@ -35,7 +36,7 @@ if __name__ == "__main__":
             continue
 
         if len(request_body) >= MAX_REQUEST_SIZE:
-            print 'Sending request of size ' + str(len(request_body)) + " (line " + str(line_index) + "/" + str(line_count) ")"
+            print "Sending request of size " + str(len(request_body)) + " (line " + str(line_index) + "/" + str(line_count) + ")"
             r = requests.put(request_url, data=request_body)
             print r
             request_body = ""
@@ -47,6 +48,6 @@ if __name__ == "__main__":
         request_body += index_json + line + "\n"
 
     if len(request_body) > 0:
-        print 'Sending request of size ' + str(len(request_body)) + " (line " + str(line_index) + "/" + str(line_count) ")"
+        print 'Sending request of size ' + str(len(request_body)) + " (line " + str(line_index) + "/" + str(line_count) + ")"
         r = requests.put(request_url, data=request_body)
         print r
